@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, param } = require("express-validator");
+const { param } = require("express-validator");
 const controller = require("../controllers/feed");
 
 const router = express.Router();
@@ -8,20 +8,45 @@ const router = express.Router();
 router.get("/get-posts", controller.getPosts);
 
 // GET Post by ID
-router.get("/get-post/:id", controller.getPost);
-
-// POST New Post
-router.post(
-  "/add-new-post",
-  [body("content").trim().notEmpty().withMessage("Content shouldn't be empty")],
-  controller.addNewPost
+router.get(
+  "/get-post/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+  ],
+  controller.getPost
 );
 
-// DELETE Post
-router.delete(
-  "/delete-post/:postId",
-  [param("postId").trim().notEmpty().withMessage("PostId required!")],
-  controller.deletePost
+// POST Like a post
+router.get(
+  "/like-post/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+  ],
+  controller.getPost
+);
+
+// POST Unlike a post
+router.get(
+  "/unlike-post/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+  ],
+  controller.getPost
 );
 
 module.exports = router;

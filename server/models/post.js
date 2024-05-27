@@ -10,7 +10,7 @@ const postSchema = new Schema(
       required: true,
     },
     content: { type: String, required: true },
-    mediaURL: { type: String },
+    media: { url: String, id: String, },
     likes: {
       type: Number,
       default: 0,

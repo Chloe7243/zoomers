@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Post = require("./post");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -21,6 +20,7 @@ const userSchema = new Schema(
       required: true,
     },
     profile: {
+      image: { url: { type: String, default: "" }, id: String },
       posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
       likes: [{ type: Schema.Types.ObjectId, ref: "Post" }],
       following: [{ type: Schema.Types.ObjectId, ref: "User" }],

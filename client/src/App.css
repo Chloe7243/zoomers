@@ -1,4 +1,13 @@
-#root {
-  margin: 0;
-  padding: 0;
+:root {
+  --primary-color-1: #E6EEFA
+  --primary-color-2: #6C7A9C
+  --primary-color-3: #E9E9EB
+  --primary-color-4: #5790DF
+  --primary-color-5: #093D89
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

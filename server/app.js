@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
+const authRoutes = require("./routes/auth");
 const feedRoutes = require("./routes/feed");
 const userRoutes = require("./routes/user");
 
@@ -26,7 +27,8 @@ app.use(upload.single("media"));
 
 // ROUTES
 app.use("/feed", isAuth, feedRoutes);
-app.use("/user", userRoutes);
+app.use("/user", isAuth, userRoutes);
+app.use("/auth", authRoutes);
 app.use(errorHandler);
 
 mongoose

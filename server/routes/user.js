@@ -1,58 +1,78 @@
 const express = require("express");
-const User = require("../models/user");
-const { body } = require("express-validator");
 const controller = require("../controllers/user");
+const { body, param } = require("express-validator");
 
 const router = express.Router();
 
-// POST Login user
+// POST New Post
 router.post(
-  "/login",
+  "/add-new-post",
   [
-    body("email").isEmail().withMessage("Please enter a valid email."),
-    body(
-      "password",
-      "Password must consist of letters and numbers and must be a minimum of 8 characters"
-    )
-      .isLength({ min: 8 })
-      .isAlphanumeric(),
+    body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
+    body("media").isBase64().withMessage("media format must be base64 string"),
   ],
-  controller.postLogin
+  controller.addNewPost
 );
 
-// POST Signup user
-router.post(
-  "/signup",
+// PATCH Edit Post
+router.patch(
+  "/edit-post",
   [
-    body("username")
+    body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
+    body("media").isBase64().withMessage("media format must be base64 string"),
+  ],
+  controller.editPost
+);
+
+// DELETE Post
+router.delete(
+  "/delete-post/:id",
+  [
+    param("id")
+      .trim()
       .notEmpty()
-      .withMessage("Username must not be empty")
-      .custom(async (value) => {
-        const data = await User.findOne({ username: value });
-        if (data) return Promise.reject("Username already taken!");
-      }),
-    body("email")
-      .isEmail()
-      .withMessage("Please enter a valid email.")
-      .custom(async (email) => {
-        const data = await User.findOne({ email });
-        if (data) return Promise.reject("E-mail Address already exists!");
-      })
-      .normalizeEmail(),
-    body("password")
-      .isLength({ min: 8 })
-      .isAlphanumeric()
-      .withMessage(
-        "Password must consist of letters and numbers and must be a minimum of 8 characters"
-      ),
-    body("dob", "Username must not be empty")
-      .isISO8601()
-      .withMessage("dob must be a valid date!"),
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
   ],
-  controller.postSignUp
+  controller.deletePost
 );
 
-// // POST Signup user
-// router.post("/get-user-followers", controller.postSignUp)
+// POST Follow a User
+router.post(
+  "/follow/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+  ],
+  controller.followAUser
+);
+
+// POST Unollow a User
+router.post(
+  "/unfollow/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+  ],
+  controller.unfollowAUser
+);
+
+// GET Followers
+router.get("/followers", controller.getFollowers);
+
+// GET Likes
+router.get("/likes", controller.getLikes);
+
+// GET Posts
+router.get("/likes", controller.getLikes);
 
 module.exports = router;

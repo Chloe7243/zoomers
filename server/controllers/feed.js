@@ -37,43 +37,8 @@ exports.getPost = async (req, res) => {
   }
 };
 
-// Create new post
-exports.addNewPost = async (req, res) => {
-  const { content, media } = req.body;
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return handleError(
-      res,
-      errors.array().map((err) => err.msg),
-      422
-    );
-  }
-  const postData = { content, user: req.userId };
-  if (media) {
-    try {
-      const data = await cloudinary.uploader.upload(media);
-      postData.mediaURL = data.secure_url;
-    } catch (error) {
-      return handleError(res, "Couldn't upload post. Please try again!", 500);
-    }
-  }
-
-  try {
-    const post = new Post(postData);
-    await post.save();
-    const user = await User.findById(req.userId);
-    user.profile.posts.push(post);
-    await user.save();
-    res
-      .status(201)
-      .json({ message: "Post created successfuly", success: true });
-  } catch (err) {
-    return handleError(res, err.message, err.statusCode);
-  }
-};
-
-// delete post
-exports.deletePost = async (req, res) => {
+// Like a post
+exports.likeAPost = async (req, res) => {
   const postID = req.params.postId;
   try {
     if (!postID) {
@@ -81,22 +46,40 @@ exports.deletePost = async (req, res) => {
       throw new Error("Couldnt't find post");
     }
     const post = await Post.findById(postID);
-    if (!post) {
-      err.statusCode = 404;
-      throw Error("Couldn't find post.");
-    }
-    if (post.user._id.toString() !== req.userId) {
-      err.statusCode = 401;
-      throw Error("Not authorized");
-    }
-    await Post.findByIdAndDelete(postID);
     const user = await User.findById(req.userId);
-    user.profile.posts.pull(postID);
+    user.profile.likes.push(postID)
+    post.likes.increase();
+    await post.save();
     await user.save();
-    return res
-      .status(200)
-      .json({ success: true, message: "Deleted successfully" });
+    res.status(200).json({
+      success: true,
+      message: "Fetched post Successfully",
+      data: post,
+    });
   } catch (err) {
-    return handleError(res, err.message, 500);
+    return handleError(res, err.message, err.statusCode);
+  }
+};
+
+// Unlike a post
+exports.UnlikeAPost = async (req, res) => {
+  const postID = req.params.postId;
+  try {
+    if (!postID) {
+      err.statusCode = 404;
+      throw new Error("Couldnt't find post");
+    }
+    const post = await Post.findById(postID);
+    const user = await User.findById(req.userId);
+    user.profile.likes.pull(postID)
+    post.likes.decrease();
+    await post.save();
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Successful",
+    });
+  } catch (err) {
+    return handleError(res, err.message, err.statusCode);
   }
 };
