@@ -55,7 +55,7 @@ const Login = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full px-3">
+    <div className="flex flex-col items-center py-4 h-full w-full px-3 overflow-y-auto">
       <Logo />
       <Form {...form}>
         <div className="flex flex-col gap-8 h-max min-w-[min(30rem,_100%)] max-w-[30rem] min max-h-[40rem] rounded-[2rem] bg-pc2 p-4">

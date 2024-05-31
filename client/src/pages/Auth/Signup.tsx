@@ -68,7 +68,7 @@ const Signup = () => {
   const formStyle = "min-w-[min(18rem,_100%)] flex-1";
 
   return (
-    <div className="flex items-center justify-center h-full w-full overflow-auto px-3">
+    <div className="flex flex-col items-center justify-center h-full w-full overflow-auto py-4 px-3">
       <Logo />
       <Form {...form}>
         <div className="flex flex-col gap-8 min-w-[min(50rem,_100%)] max-w-[30rem] max-h-[85%] rounded-[2rem] bg-pc2 p-4 h-max overflow-y-auto">
