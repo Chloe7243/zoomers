@@ -3,4 +3,61 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+  scroll-behavior: smooth;
+}
+
+*::-webkit-scrollbar {
+  width: 0.3rem;
+  height: 0.3rem;
+  background: rgb(var(--primary-color-1));
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--primary-color-2));
+  border-radius: 3px;
+}
+
+.logo-text {
+  font-size: 40px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary-color-2)),
+    rgb(var(--primary-color-3)),
+    rgb(var(--primary-color-2)),
+    rgb(var(--primary-color-1)),
+    rgb(var(--primary-color-2))
+  );
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+.tabs-trigger[data-state="active"] {
+  background: none !important;
+  text-decoration: underline;
+  box-shadow: none !important;
+}
+
+.tabs-content {
+  flex: 1 !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.post-image::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+div:has(> .giphy) {
+  padding: 0 4rem;
+  height: 45%;
+  min-width: min-content !important;
+}
+
+@media screen and (max-width: 768px) {
+  div:has(> .giphy) {
+    padding: 0 2rem;
+  }
 }

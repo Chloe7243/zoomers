@@ -18,11 +18,11 @@ export default {
     },
     extend: {
       colors: {
-        pc1: "var(--primary-color-1)",
-        pc2: "var(--primary-color-2)",
-        pc3: "var(--primary-color-3)",
-        pc4: "var(--primary-color-4)",
-        pc5: "var(--primary-color-5)",
+        pc1: "rgba(var(--primary-color-1), <alpha-value>)",
+        pc2: "rgba(var(--primary-color-2), <alpha-value>)",
+        pc3: "rgba(var(--primary-color-3), <alpha-value>)",
+        pc4: "rgba(var(--primary-color-4), <alpha-value>)",
+        pc5: "rgba(var(--primary-color-5), <alpha-value>)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,6 +61,7 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "primary": "var(--primary-border-radius)",
       },
       keyframes: {
         "accordion-down": {

@@ -59,13 +59,16 @@ exports.postSignUp = async (req, res) => {
       422
     );
   }
-  const { username, email, password, dob } = req.body;
+  console.log(req.body);
+  const { lastname, firstname, username, email, password, dob } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400);
     }
     const newUser = new User({
+      lastname,
+      firstname,
       username,
       email,
       dob,

@@ -24,6 +24,8 @@ router.post(
 router.post(
   "/signup-user",
   [
+    body("firstname").notEmpty().withMessage("Firstname must not be empty"),
+    body("lastname").notEmpty().withMessage("Lastname must not be empty"),
     body("username")
       .notEmpty()
       .withMessage("Username must not be empty")

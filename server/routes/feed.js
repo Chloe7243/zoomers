@@ -22,7 +22,7 @@ router.get(
 );
 
 // POST Like a post
-router.get(
+router.patch(
   "/like-post/:id",
   [
     param("id")
@@ -32,11 +32,11 @@ router.get(
       .isString()
       .withMessage("Id must be a string!"),
   ],
-  controller.getPost
+  controller.likeAPost
 );
 
 // POST Unlike a post
-router.get(
+router.patch(
   "/unlike-post/:id",
   [
     param("id")
@@ -46,7 +46,7 @@ router.get(
       .isString()
       .withMessage("Id must be a string!"),
   ],
-  controller.getPost
+  controller.unlikeAPost
 );
 
 module.exports = router;

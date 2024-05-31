@@ -1,22 +1,24 @@
 import toast from "react-hot-toast";
 import { createSlice } from "@reduxjs/toolkit";
+import { authTokenKey } from "@/utils/constants";
+
+const token = localStorage.getItem(authTokenKey);
 
 const authSlice = createSlice({
   name: "isAuth",
-  initialState: localStorage.getItem("authToken") ? true : false,
+  initialState: token ? true : false,
   reducers: {
-    authenticate: (state) => {
-      state = true;
-      return state;
+    authenticate: () => {
+      return true;
     },
     revokeAuthentication: (state) => {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem(authTokenKey);
       toast.error("Not authorized", { id: "unauthorized" });
       state = false;
       return state;
     },
     logoutUser: (state) => {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem(authTokenKey);
       toast.success("Logged out successfully", { id: "unauthorized" });
       state = false;
       return state;

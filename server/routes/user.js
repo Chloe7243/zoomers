@@ -4,22 +4,31 @@ const { body, param } = require("express-validator");
 
 const router = express.Router();
 
+// GET user details
+router.get("/user-details?:id", controller.getUser);
+
 // POST New Post
 router.post(
   "/add-new-post",
   [
     body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
-    body("media").isBase64().withMessage("media format must be base64 string"),
+    body("media"),
   ],
   controller.addNewPost
 );
 
 // PATCH Edit Post
 router.patch(
-  "/edit-post",
+  "/edit-post/:id",
   [
     body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
     body("media").isBase64().withMessage("media format must be base64 string"),
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
   ],
   controller.editPost
 );
@@ -72,7 +81,7 @@ router.get("/followers", controller.getFollowers);
 // GET Likes
 router.get("/likes", controller.getLikes);
 
-// GET Posts
-router.get("/likes", controller.getLikes);
+// // GET Posts
+// router.get("/likes", controller.getLikes);
 
 module.exports = router;

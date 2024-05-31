@@ -10,11 +10,8 @@ const postSchema = new Schema(
       required: true,
     },
     content: { type: String, required: true },
-    media: { url: String, id: String, },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    media: { url: String, id: String },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

@@ -4,6 +4,35 @@ const cloudinary = require("../utils/cloudinary");
 const { validationResult } = require("express-validator");
 const handleError = require("../utils/handleError");
 
+exports.getUser = async (req, res) => {
+  const userId = req.query.id || req.userId;
+  console.log({ userId });
+  try {
+    const user = await User.findById(userId)
+      .populate("profile.posts")
+      .sort({ updatedAt: -1 })
+      .populate("profile.likes")
+      .sort({ updatedAt: -1 })
+      .populate("profile.followers")
+      .sort({ updatedAt: -1 })
+      .populate("profile.following")
+      .sort({ updatedAt: -1 });
+    console.log(user);
+    if (user) {
+      return res.status(200).json({
+        success: true,
+        data: user,
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+  } catch (error) {
+    return handleError(res, error.message, 500);
+  }
+};
+
 // Create new post
 exports.addNewPost = async (req, res) => {
   const { content, media } = req.body;
@@ -15,7 +44,7 @@ exports.addNewPost = async (req, res) => {
       422
     );
   }
-  const postData = { content, user: req.userId };
+  const postData = { content, user: req.userId, likes:[] };
   if (media) {
     try {
       const data = await cloudinary.uploader.upload(media, {
@@ -44,11 +73,19 @@ exports.addNewPost = async (req, res) => {
 // Edit existing post
 exports.editPost = async (req, res) => {
   const postID = req.params.Id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return handleError(
+      res,
+      errors.array().map((err) => err.msg),
+      422
+    );
+  }
   try {
-    if (!postID) {
-      err.statusCode = 404;
-      throw new Error("Couldnt't find post");
-    }
+    // if (!postID) {
+    //   err.statusCode = 404;
+    //   throw new Error("Couldnt't find post");
+    // }
     const post = await Post.findById(postID);
     if (!post) {
       err.statusCode = 404;
@@ -91,13 +128,23 @@ exports.editPost = async (req, res) => {
 
 // delete post
 exports.deletePost = async (req, res) => {
-  const postID = req.params.Id;
+  const postID = req.params.id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return handleError(
+      res,
+      errors.array().map((err) => err.msg),
+      422
+    );
+  }
   try {
-    if (!postID) {
-      err.statusCode = 404;
-      throw new Error("Couldnt't find post");
-    }
+    // if (!postID) {
+    //   err.statusCode = 404;
+    //   throw new Error("Couldnt't find post");
+    // }
+    
     const post = await Post.findById(postID);
+    console.log("delete", post);
     if (!post) {
       err.statusCode = 404;
       throw Error("Couldn't find post.");
@@ -163,7 +210,15 @@ exports.getLikes = async (req, res) => {
 
 // Follow a user
 exports.followAUser = async (req, res) => {
-  const userToFollowId = req.params.Id;
+  const userToFollowId = req.params.id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return handleError(
+      res,
+      errors.array().map((err) => err.msg),
+      422
+    );
+  }
   try {
     const userFollowing = await User.findById(req.userId);
     const userToFollow = await User.findById(userToFollowId);
@@ -182,12 +237,20 @@ exports.followAUser = async (req, res) => {
 
 // Get user likes
 exports.unfollowAUser = async (req, res) => {
-  const userToUnfollowId = req.params.Id;
+  const userToUnfollowId = req.params.id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return handleError(
+      res,
+      errors.array().map((err) => err.msg),
+      422
+    );
+  }
   try {
     const userUnfollowing = await User.findById(req.userId);
     const userToUnfollow = await User.findById(userToUnfollowId);
     userToUnfollow.profile.followers.pull(req.userId);
-    userUnfollowing.profile.following.push(userToUnfollowId);
+    userUnfollowing.profile.following.pull(userToUnfollowId);
     await userToUnfollow.save();
     await userUnfollowing.save();
     res.status(200).json({

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+app.use(cors())
 app.use(upload.single("media"));
 
 // ROUTES

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Theme } from "@/types";
 import { uiThemeKey } from "@/utils/constants";
 
+
 const themeSlice = createSlice({
   name: "theme",
   initialState: (localStorage.getItem(uiThemeKey) as Theme) || "system",
@@ -16,3 +17,5 @@ const themeSlice = createSlice({
 
 export const { setTheme } = themeSlice.actions;
 export default themeSlice.reducer;
+
+
