@@ -27,7 +27,6 @@ const UsersView = ({
             authUserFollowing
               ?.map((user) => user._id)
               .includes(user._id.toString()) || false;
-          console.log({ authUserFollowing, isFollowed });
           return <User user={user} isFollowedByAuthUser={isFollowed} key={i} />;
         })
       )}

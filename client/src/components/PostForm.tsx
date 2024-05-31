@@ -127,7 +127,7 @@ const PostForm = () => {
                 value={""}
                 type="file"
                 className="absolute left-0 h-max p-1 right-[-.5rem] border-0 w-full bg-transparent z-10 after:content-['h'] after:bg-black after:w-full after:h-full after:absolute after:p-1 post-image"
-                accept="image/*, video/*"
+                accept="image/*"
                 onChange={(e) => handleMediaUpload(e)}
               />
               <IoImages size={22} className="relative bg-background" />
@@ -174,7 +174,7 @@ const PostForm = () => {
             onSubmit(form.getValues());
           }}
         >
-          {isLoading ? <Loader  /> : "Post"}
+          {isLoading ? <Loader size={14}  /> : "Post"}
         </Button>
         <DrawerClose>
           <Button variant="outline" className="w-full">

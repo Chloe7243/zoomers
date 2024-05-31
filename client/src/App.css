@@ -33,6 +33,10 @@
   -webkit-background-clip: text;
 }
 
+.loader >  span{
+  background-color: rgb(var(--primary-color-2)) !important;
+}
+
 .tabs-trigger[data-state="active"] {
   background: none !important;
   text-decoration: underline;

@@ -36,7 +36,6 @@ const Post = ({
 
   const toggleLikePost = async () => {
     try {
-      console.log({ isLiked });
       if (!isLiked) {
         await likePost(postId).unwrap();
         setIsLiked(true);

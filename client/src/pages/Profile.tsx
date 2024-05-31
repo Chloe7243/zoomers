@@ -39,8 +39,7 @@ const Profile = () => {
   );
   const [followUser] = useFollowUserMutation();
   const [unfollowUser] = useUnFollowUserMutation();
-  const isAuthUser = !userId || (userId && (userId === authUser?.userId));
-  console.log({ isAuthUser, userId, authUser });
+  const isAuthUser = !userId || (userId && userId === authUser?.userId);
 
   const toggleFollowUser = async () => {
     if (userId) {
@@ -57,12 +56,6 @@ const Profile = () => {
       }
     }
   };
-
-  const tabsContainerRef = useRef<HTMLDivElement>(null);
-
-  const tabsContentHeight = tabsContainerRef.current?.offsetHeight;
-
-  console.log({ tabsContentHeight, tabsContainerRef });
 
   return (
     <div className="h-full flex flex-col gap-2 bg-pc1 overflow-hidden">
@@ -147,15 +140,8 @@ const Profile = () => {
                 Following
               </TabsTrigger>
             </TabsList>
-            <div
-              className="flex-1 flex-col flex overflow-hidden w-full"
-              ref={tabsContainerRef}
-            >
-              <TabsContent
-                value="posts"
-                className="tabs-content"
-                style={{ maxHeight: tabsContentHeight }}
-              >
+            <div className="flex-1 flex-col flex overflow-hidden w-full">
+              <TabsContent value="posts" className="tabs-content">
                 <PostsView
                   showPostUser={false}
                   posts={userDetails?.profile.posts}

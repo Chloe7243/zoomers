@@ -13,7 +13,7 @@ const ProfilePhoto = ({
   const names = fullname?.split(" ") || "U";
   const fallback = names[0][0] + names?.[1][0];
   return (
-    <Avatar style={{width:size, height:size}}>
+    <Avatar style={{width:size, height:size, border:".1px solid"}}>
       <AvatarImage  src={img} />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
