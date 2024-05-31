@@ -1,12 +1,14 @@
 import { ReactNode } from "react";
 // import { useAppDispatch } from "@/hooks";
 import { Button } from "./ui/button";
-import { FaFire } from "react-icons/fa";
-import { FaEnvelope, FaMessage, FaPlus } from "react-icons/fa6";
-import { HiChatBubbleLeft, HiHome, HiMiniUserCircle, HiOutlineBell, HiUser } from "react-icons/hi2";
+import { FaPlus } from "react-icons/fa6";
+import {
+  HiChatBubbleLeft,
+  HiHome,
+  HiMiniUserCircle,
+  HiOutlineBell,
+} from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
-import { BsBellFill } from "react-icons/bs";
-import { HiMiniHome } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { Drawer, DrawerTrigger } from "./ui/drawer";
 import PostForm from "./PostForm";
@@ -24,8 +26,7 @@ const NavbarLink = ({ to, children }: { to: string; children: ReactNode }) => {
   );
 };
 
-
-const Navbar = ({ bgColor = "background" }: { bgColor?: string }) => {
+const Navbar = () => {
   return (
     <div className="flex items-center w-[100dvw] justify-around px-4 py-1 backdrop-blur-[70px] bg-pc2/30">
       <NavbarLink to="/explore">

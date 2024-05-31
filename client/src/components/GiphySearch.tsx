@@ -54,7 +54,6 @@ const GiphySearch = ({ onSelect }: { onSelect: (_: string) => void }) => {
 
   const data = !query ? currentData?.data : searchedGIFs?.data;
 
-
   return (
     <div className="h-full overflow-y-auto flex flex-col gap-2 min-w-[min(30rem,_100%)]">
       <Input
@@ -75,7 +74,7 @@ const GiphySearch = ({ onSelect }: { onSelect: (_: string) => void }) => {
           }}
         >
           {" "}
-          {data.map((el: any, i) => (
+          {data.map((el: any, i: number) => (
             <PopoverClose>
               <div
                 key={i}

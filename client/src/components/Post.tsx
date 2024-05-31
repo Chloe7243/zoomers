@@ -39,11 +39,11 @@ const Post = ({
       if (!isLiked) {
         await likePost(postId).unwrap();
         setIsLiked(true);
-        setNoLikedUsers((prev) => prev + 1);
+        setNoLikedUsers((prev: number) => prev + 1);
       } else {
         await unlikePost(postId).unwrap();
         setIsLiked(false);
-        setNoLikedUsers((prev) => prev - 1);
+        setNoLikedUsers((prev: number) => prev - 1);
       }
     } catch (error) {
       displayErrorMessage(error);

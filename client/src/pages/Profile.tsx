@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { FaUserEdit } from "react-icons/fa";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+// import { FaUserEdit } from "react-icons/fa";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
 import ProfilePhoto from "@/components/ProfilePhoto";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PostsView from "@/components/PostsView";
@@ -24,7 +24,7 @@ import Loader from "@/components/Loader";
 import { useParams } from "react-router-dom";
 import ErrorMsg from "@/components/ErrorMsg";
 import { useAppSelector } from "@/hooks";
-import { useRef, useState } from "react";
+import { useState } from "react";
 // import { useAppSelector } from "@/hooks";
 
 const Profile = () => {
