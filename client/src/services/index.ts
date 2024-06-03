@@ -4,9 +4,9 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { toast } from "@/components/ui/use-toast";
 import { TAGS, authTokenKey } from "../utils/constants";
 import { UserCredentials } from "@/types";
+import { revokeAuthentication } from "@/store/slices/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL,
@@ -26,7 +26,7 @@ const baseQueryWithReauth = async (
 ) => {
   const result = await baseQuery(args, api, {});
   if (result?.error?.status === 401) {
-    toast({ description: "Not authorized", variant: "destructive" });
+    api.dispatch(revokeAuthentication());
   }
   return result;
 };

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
+import { userKey } from "./constants";
 
 export const displayErrorMessage = (err: any) => {
   const defaultMsg = "Something went wrong, please try again!";
@@ -27,4 +29,16 @@ export const imgToBase64 = (file: any, callbackFnc: (res: string) => void) => {
   reader.onloadend = () => {
     callbackFnc(reader.result?.toString() || "");
   };
+};
+
+export const decodeToken = (token: string) => {
+  let decoded = null;
+  if (token) decoded = jwtDecode<any>(token || "");
+  return decoded;
+};
+
+export const setLSUser = (decodedToken: string) => {
+  const jwtString = JSON.stringify(decodedToken);
+  localStorage.setItem(userKey, jwtString);
+  return jwtString;
 };

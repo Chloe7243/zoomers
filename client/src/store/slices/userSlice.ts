@@ -1,22 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { authTokenKey } from "@/utils/constants";
-import { jwtDecode } from "jwt-decode";
+import { authTokenKey, userKey } from "@/utils/constants";
+import { decodeToken, setLSUser } from "@/utils/functions";
 
-const token = localStorage.getItem(authTokenKey);
-let decoded;
-if (token) decoded = jwtDecode<any>(token || "");
+let user = localStorage.getItem(userKey);
+if (!user) {
+  const token = localStorage.getItem(authTokenKey);
+  const decodedToken = decodeToken(token || "");
+  user = setLSUser(decodedToken);
+}
 
 const userSlice = createSlice({
   name: "user",
-  initialState: !token ? null : {...decoded },
+  initialState: JSON.parse(user),
   reducers: {
     removeUser: (state) => {
       state = null;
       return state;
     },
+    setUser: (state, { payload }: { payload: string }) => {
+      const decodedToken = decodeToken(payload);
+      state = JSON.parse(setLSUser(decodedToken));
+      return state;
+    },
   },
 });
 
-export const { removeUser } = userSlice.actions;
+export const { removeUser, setUser } = userSlice.actions;
 export default userSlice.reducer;

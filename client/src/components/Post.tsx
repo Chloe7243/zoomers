@@ -11,14 +11,19 @@ import { useAppSelector } from "@/hooks";
 import { Drawer, DrawerTrigger } from "./ui/drawer";
 import { useDeletePostMutation } from "@/services/users";
 import toast from "react-hot-toast";
+import PostForm from "./PostForm";
+import PostLikes from "./PostLikes";
+import PostComments from "./PostComments";
 
 const Post = ({
   post,
   showUser = true,
+  showAdminActions = false,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post: any;
   showUser?: boolean;
+  showAdminActions?: boolean;
 }) => {
   const postId = post?._id?.toString();
   const postUserId = post?.user?._id?.toString();
@@ -62,7 +67,6 @@ const Post = ({
       toast.dismiss(toastId);
     }
   };
-
   return (
     <div className="rounded-[2rem] h-max bg-pc1 flex flex-col gap-4 pt-4 shadow-[rgba(67,_71,_85,_0.27)_0px_0px_0.25em,_rgba(90,_125,_188,_0.05)_0px_0.25em_1em] hover:cursor-pointer">
       {showUser && (
@@ -95,30 +99,56 @@ const Post = ({
           />
         )}
       </div>
-      <footer className="rounded-b-[1.9rem] bg-pc2 backdrop-blur-3xl flex justify-between items-center px-5 py-2 text-pc3">
-        <div className="flex gap-4 items-center">
-          <span className="flex items-center gap-1">
-            <FaCommentDots />0
-          </span>
-          <span className="flex items-center gap-1" onClick={toggleLikePost}>
-            <BsHearts className={isLiked ? `fill-red-700` : ""} />
-            {noLikedUsers}
+      <footer className="rounded-b-[1.9rem] bg-pc2 backdrop-blur-3xl flex flex-col gap-2 px-5 py-2 text-pc3">
+        <div className="flex gap-2 items-center text-sm">
+          <Drawer>
+            <DrawerTrigger>
+              <button className="hover:underline">View likes</button>
+            </DrawerTrigger>
+            <PostLikes postId={postId} />
+          </Drawer>
+          <Drawer>
+            <DrawerTrigger>
+              <button className="hover:underline">View comments</button>
+            </DrawerTrigger>
+            <PostComments postId={postId} />
+          </Drawer>
+        </div>
+        <div className="flex gap-1 justify-between items-center">
+          <div className="flex gap-4 items-center">
+            <Drawer>
+              <DrawerTrigger>
+                <span className="flex items-center gap-1.5">
+                  <FaCommentDots /> {post?.comments?.length}
+                </span>
+              </DrawerTrigger>
+              <PostComments postId={postId} />
+            </Drawer>
+            <span className="flex items-center gap-1.5" onClick={toggleLikePost}>
+              <BsHearts className={isLiked ? `fill-red-700` : ""} />
+              {noLikedUsers}
+            </span>
+          </div>
+          <span className="flex items-center gap-4">
+            {showAdminActions ? (
+              <>
+                <MdDelete onClick={deletePost} />
+                <Drawer>
+                  <DrawerTrigger>
+                    <FaEdit />
+                  </DrawerTrigger>
+                  <PostForm
+                    content={post?.content}
+                    media={post?.media.url}
+                    formType="edit"
+                    postId={postId}
+                  />
+                </Drawer>
+              </>
+            ) : null}
+            <FaShareAltSquare />
           </span>
         </div>
-        <span className="flex items-center gap-4">
-          {!showUser ? (
-            <>
-              <MdDelete onClick={deletePost} />
-              <Drawer>
-                <DrawerTrigger>
-                  <FaEdit />
-                </DrawerTrigger>
-              </Drawer>
-            </>
-          ) : (
-            <FaShareAltSquare />
-          )}
-        </span>
       </footer>
     </div>
   );

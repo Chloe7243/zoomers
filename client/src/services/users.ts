@@ -49,6 +49,20 @@ const usersApi = api.injectEndpoints({
       }),
       invalidatesTags: [TAGS.USER],
     }),
+    makeAcomment: builder.mutation({
+      query: ({
+        postId,
+        ...commentData
+      }: {
+        content: string;
+        postId: string;
+      }) => ({
+        url: `user/add-comment/${postId}`,
+        method: "POST",
+        body: commentData,
+      }),
+      invalidatesTags: [TAGS.POST, TAGS.USER, TAGS.COMMENTS],
+    }),
   }),
 });
 
@@ -59,4 +73,5 @@ export const {
   useDeletePostMutation,
   useFollowUserMutation,
   useUnFollowUserMutation,
+  useMakeAcommentMutation,
 } = usersApi;

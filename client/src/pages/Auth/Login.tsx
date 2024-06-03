@@ -23,6 +23,8 @@ import { displayErrorMessage } from "@/utils/functions";
 import { authenticate } from "@/store/slices/authSlice";
 import { useLoginUserMutation } from "@/services";
 import Logo from "@/components/Logo";
+import Loader from "@/components/Loader";
+import { setUser } from "@/store/slices/userSlice";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -44,10 +46,11 @@ const Login = () => {
     try {
       const { data } = await loginUser(values).unwrap();
       localStorage.setItem(authTokenKey, data.authToken);
+      dispatch(setUser(data.authToken));
       dispatch(authenticate());
       toast.success("Logged in successfully", { id: "unauthorized" });
-      window.location.reload();
-      setTimeout(() => navigate("/explore"), 1000);
+      // window.location.reload();
+      setTimeout(() => navigate("/explore"), 0);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       displayErrorMessage(error);
@@ -112,7 +115,7 @@ const Login = () => {
               </Link>
             </div>
             <Button className="mt-6" type="submit">
-              Submit
+              {isLoading ? <Loader size={14} /> : "Submit"}
             </Button>
             <div className="w-full flex items-center gap-2">
               <span className="flex-1 border"></span>or

@@ -15,7 +15,20 @@ const postsApi = api.injectEndpoints({
         url: `feed/get-post/${id}`,
         method: "GET",
       }),
-      
+    }),
+    getPostLikes: builder.query({
+      query: (id: string) => ({
+        url: `feed/get-post-likes/${id}`,
+        method: "GET",
+      }),
+      providesTags: [TAGS.LIKES],
+    }),
+    getPostComments: builder.query({
+      query: (id: string) => ({
+        url: `feed/get-post-comments/${id}`,
+        method: "GET",
+      }),
+      providesTags: [TAGS.COMMENTS],
     }),
     likePost: builder.mutation({
       query: (id: string) => ({
@@ -38,5 +51,7 @@ export const {
   useGetAllPostsQuery,
   useGetPostByIdQuery,
   useLikePostMutation,
+  useGetPostLikesQuery,
   useUnlikePostMutation,
+  useGetPostCommentsQuery,
 } = postsApi;

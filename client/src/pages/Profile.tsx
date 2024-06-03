@@ -107,7 +107,9 @@ const Profile = () => {
           <p className="w-full text-center mt-[-2rem] font-bold text-lg">
             @{userDetails?.username}
           </p>
-          <p className="w-full text-center text-pc2">Bio</p>
+          <p className="w-full text-center text-pc2">
+            {userDetails?.profile?.bio}
+          </p>
           {!isAuthUser && (
             <div className="flex items-center gap-5 justify-center">
               <Button
@@ -145,6 +147,7 @@ const Profile = () => {
                 <PostsView
                   showPostUser={false}
                   posts={userDetails?.profile.posts}
+                  showAdminActions
                   postsLoading={userDetailsLoading}
                 />
               </TabsContent>

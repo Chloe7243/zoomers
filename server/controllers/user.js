@@ -3,21 +3,20 @@ const User = require("../models/user");
 const cloudinary = require("../utils/cloudinary");
 const { validationResult } = require("express-validator");
 const handleError = require("../utils/handleError");
+const Comment = require("../models/comment");
 
 exports.getUser = async (req, res) => {
   const userId = req.query.id || req.userId;
-  console.log({ userId });
   try {
     const user = await User.findById(userId)
       .populate("profile.posts")
       .sort({ updatedAt: -1 })
-      .populate("profile.likes")
+      .populate({ path: "profile.likes", populate: { path: "user" } })
       .sort({ updatedAt: -1 })
       .populate("profile.followers")
       .sort({ updatedAt: -1 })
       .populate("profile.following")
       .sort({ updatedAt: -1 });
-    console.log(user);
     if (user) {
       return res.status(200).json({
         success: true,
@@ -44,7 +43,7 @@ exports.addNewPost = async (req, res) => {
       422
     );
   }
-  const postData = { content, user: req.userId, likes:[] };
+  const postData = { content, user: req.userId, likes: [], comments: [] };
   if (media) {
     try {
       const data = await cloudinary.uploader.upload(media, {
@@ -72,7 +71,7 @@ exports.addNewPost = async (req, res) => {
 
 // Edit existing post
 exports.editPost = async (req, res) => {
-  const postID = req.params.Id;
+  const postID = req.params.id;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return handleError(
@@ -142,9 +141,8 @@ exports.deletePost = async (req, res) => {
     //   err.statusCode = 404;
     //   throw new Error("Couldnt't find post");
     // }
-    
+
     const post = await Post.findById(postID);
-    console.log("delete", post);
     if (!post) {
       err.statusCode = 404;
       throw Error("Couldn't find post.");
@@ -163,6 +161,53 @@ exports.deletePost = async (req, res) => {
       .json({ success: true, message: "Deleted successfully" });
   } catch (err) {
     return handleError(res, err.message, 500);
+  }
+};
+
+// Make a comment
+exports.makeAComment = async (req, res) => {
+  const postID = req.params.id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return handleError(
+      res,
+      errors.array().map((err) => err.msg),
+      422
+    );
+  }
+  try {
+    const post = await Post.findById(postID);
+    if (!post) {
+      err.statusCode = 404;
+      throw Error("Couldn't find post.");
+    }
+    if (post.user._id.toString() !== req.userId) {
+      err.statusCode = 401;
+      throw Error("Not authorized");
+    }
+    const { content } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return handleError(
+        res,
+        errors.array().map((err) => err.msg),
+        422
+      );
+    }
+    const commentData = { content, user: req.userId, post: postID, likes: [] };
+    const comment = new Comment(commentData);
+    await comment.save();
+    const user = await User.findById(req.userId);
+    user.profile.comments.push(comment);
+    post.comments.push(comment);
+    await post.save();
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Added comment successfully",
+    });
+  } catch (err) {
+    return handleError(res, err.message, 400);
   }
 };
 
@@ -198,6 +243,20 @@ exports.getFollowers = async (req, res) => {
 exports.getLikes = async (req, res) => {
   try {
     const user = await User.findById(req.userId).populate("profile.likes");
+    res.status(200).json({
+      success: true,
+      message: "Successful",
+      data: user,
+    });
+  } catch (err) {
+    return handleError(res, err.message, err.statusCode);
+  }
+};
+
+// Get user comments
+exports.getComments = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).populate("profile.comments");
     res.status(200).json({
       success: true,
       message: "Successful",

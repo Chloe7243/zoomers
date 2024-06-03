@@ -4,7 +4,9 @@ export const TAGS: constantsObj = {
   USER: "user",
   POST: "post",
   POSTS: "post",
+  LIKES: "likes",
+  COMMENTS: "comments",
 };
 export const uiThemeKey = "ui-theme";
 export const authTokenKey = "authToken";
-export const MAX_MEDIA_PER_POST = "authToken";
+export const userKey = "zoomer_user";

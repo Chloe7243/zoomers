@@ -9,7 +9,6 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { logoutUser } from "@/store/slices/authSlice";
 import { Button } from "./ui/button";
 import { useLocation } from "react-router-dom";
-import { removeUser } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/hooks";
 
 const Header = () => {
@@ -32,7 +31,6 @@ const Header = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() => {
-                dispatch(removeUser());
                 dispatch(logoutUser());
               }}
             >

@@ -15,7 +15,7 @@ const UsersView = ({
   authUserFollowing?: any[];
 }) => {
   return (
-    <div className="flex flex-col gap-4 flex-1 p-4 overflow-y-auto w-full !max-h-[100%]">
+    <div className="flex flex-col gap-4 flex-1 p-4 overflow-y-auto w-full h-full !max-h-[100%]">
       {usersLoading ? (
         <Loader />
       ) : !users.length ? (

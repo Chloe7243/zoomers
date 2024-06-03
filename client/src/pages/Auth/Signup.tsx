@@ -217,7 +217,7 @@ const Signup = () => {
               </p>
             </div>
             <Button type="submit" className="mt-6">
-              Submit
+              {isLoading ? <Loader size={14} /> : "Submit"}
             </Button>
             <div className="w-full flex items-center gap-2">
               <span className="flex-1 border"></span>or

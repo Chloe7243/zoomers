@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { displayErrorMessage, imgToBase64 } from "@/utils/functions";
-import { useAddNewPostMutation } from "@/services/users";
+import { useAddNewPostMutation, useEditPostMutation } from "@/services/users";
 import { Textarea } from "./ui/textarea";
 import { MdOutlineGifBox } from "react-icons/md";
 import {
@@ -38,14 +38,35 @@ const formSchema = z.object({
   media: z.string().optional(),
 });
 
-const PostForm = () => {
+const PostForm = ({
+  media,
+  postId,
+  content,
+  formType = "add",
+}: {
+  content?: string;
+  media?: string;
+  formType?: "edit" | "add";
+  postId?: string;
+}) => {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-  const [textContent, setTextContent] = useState("");
-  const [imgPreview, setImgPreview] = useState<string | null>(null);
-  const [createPost, { isLoading }] = useAddNewPostMutation();
+  const [textContent, setTextContent] = useState(content || "");
+  const [editPost, { isLoading: editingPost }] = useEditPostMutation();
+  const [imgPreview, setImgPreview] = useState<string | null>(media || null);
+  const [createPost, { isLoading: addingPost }] = useAddNewPostMutation();
+
+  const isLoading = addingPost || editingPost;
+
+  // if (content) {
+  //   form.setValue("content", content);
+  // }
+
+  // if (media) {
+  //   form.setValue("media", media);
+  // }
 
   const resetMediaValue = () => {
     setImgPreview(null);
@@ -68,9 +89,11 @@ const PostForm = () => {
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (isLoading) return;
+    if (isLoading || (formType == "edit" && !postId)) return;
     try {
-      await createPost(values).unwrap();
+      formType === "edit" && postId
+        ? await editPost({ id: postId, ...values }).unwrap()
+        : await createPost(values).unwrap();
       toast.success("You just made a post");
       form.reset({ content: "", media: undefined });
       setImgPreview(null);
@@ -170,11 +193,12 @@ const PostForm = () => {
       </div>
       <DrawerFooter className="flex-row gap-4">
         <Button
+          className="capitalize"
           onClick={() => {
             onSubmit(form.getValues());
           }}
         >
-          {isLoading ? <Loader size={14}  /> : "Post"}
+          {isLoading ? <Loader size={14} /> : `${formType} Post`}
         </Button>
         <DrawerClose>
           <Button variant="outline" className="w-full">

@@ -12,7 +12,15 @@ router.post(
   "/add-new-post",
   [
     body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
-    body("media"),
+    body("media").custom(async (value) => {
+      if (body(value).isBase64()) return Promise.reject("Invalid image format");
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:";
+      } catch (e) {
+        return Promise.reject("Invalid image format");
+      }
+    }),
   ],
   controller.addNewPost
 );
@@ -45,6 +53,21 @@ router.delete(
       .withMessage("Id must be a string!"),
   ],
   controller.deletePost
+);
+
+// POST add comment
+router.post(
+  "/add-comment/:id",
+  [
+    param("id")
+      .trim()
+      .notEmpty()
+      .withMessage("Id required!")
+      .isString()
+      .withMessage("Id must be a string!"),
+    body("content").trim().notEmpty().withMessage("Content shouldn't be empty"),
+  ],
+  controller.makeAComment
 );
 
 // POST Follow a User
@@ -81,7 +104,7 @@ router.get("/followers", controller.getFollowers);
 // GET Likes
 router.get("/likes", controller.getLikes);
 
-// // GET Posts
-// router.get("/likes", controller.getLikes);
+// GET comments
+router.get("/comments", controller.getComments);
 
 module.exports = router;

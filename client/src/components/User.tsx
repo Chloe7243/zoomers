@@ -52,7 +52,10 @@ const User = ({
         <div className="flex items-center justify-between">
           <span className="flex flex-col ">
             <p>{fullName(user)}</p>{" "}
-            <p className="font-thin">@{user?.username}</p>
+            <p className="font-thin">
+              @{user?.username}
+              <span className="font-semibold">{isAuthUser ? " (you)" : null}</span>
+            </p>
           </span>
           {!isAuthUser && (
             <Button
