@@ -15,11 +15,10 @@ This README provides a comprehensive guide on setting up, configuring, and using
 
 ## Introduction
 
-Zoomers is a platform that allows users to connect, share shthoughts. Currently, users can only create profiles, post updates, like posts and follow others.
+Zoomers is a platform that allows users to connect, share thoughts. Currently, users can only create profiles, post updates, like posts and follow others.
 
 ## Live
 
-Zoomers is a platform that allows users to connect, share shthoughts. Currently, users can only create profiles, post updates, like posts and follow others.
 
 ## Features
 
