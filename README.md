@@ -77,8 +77,8 @@ The app requires certain environment variables to function correctly. Create a `
 PORT=5000
 
 # Database configuration
-Locally: MONGO_URI=mongodb://localhost:27017/social-media-app
-Atlas: MONGO_URI=mongodb+srv://<your_username>:<password>@<rest_of_link>
+Locally: MONGO_DB_URL=mongodb://localhost:27017/social-media-app
+Atlas: MONGO_DB_URL=mongodb+srv://<your_username>:<password>@<rest_of_link>
 
 # JWT Secret for authentication
 JWT_SECRET=your_jwt_secret
